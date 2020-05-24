@@ -1,2 +1,2 @@
 # space_invaders
- This is a game created using pygame
+ This game was created using pygame
