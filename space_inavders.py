@@ -1,6 +1,16 @@
+"""
+File: snake_game.py
+----------------
+The Goal of the game is to keep the snake kill the enemy before it reaches you. Spacebar controls your bullet
+"""
 import pygame
 import random
 import math
+from simpleimage import SimpleImage
+
+# Importing Image module from PIL package
+
+from PIL import Image
 
 # mixer is used for all sounds and music
 from pygame import mixer
@@ -13,9 +23,6 @@ pygame.init()
 
 # width and height
 screen = pygame.display.set_mode((800, 600))
-
-# N.B background picture should be the same as screen size
-background_img = pygame.image.load('background.png')
 
 # Background Sound
 mixer.music.load("background.wav")
@@ -126,6 +133,47 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
         return False
 
 
+
+def background_colour(image):
+    # image = SimpleImage(PATCH_NAME)
+    for pixel in image:
+        average = (pixel.red + pixel.green + pixel.blue) // 3
+        if pixel.red >= average * INTENSITY_THRESHOLD:
+            pixel.red = 105
+            pixel.green = 0
+            pixel.blue = 0
+        elif pixel.blue >= average * INTENSITY_THRESHOLD:
+            pixel.red = 0
+            pixel.green = 0
+            pixel.blue = 105
+        else:
+            # for the grey background
+            pixel.red = average
+            pixel.blue = average
+            pixel.green = average
+    return image
+
+
+WIDTH = 600
+HEIGHT = 600
+PATCH_NAME = 'background.png'
+INTENSITY_THRESHOLD = 1.4
+YELLOW = (255, 255, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+# drawing a circle
+# pygame.draw.circle(screen, YELLOW, (120, 120), 50)
+
+# Background Image
+image = SimpleImage(PATCH_NAME)
+
+final_image = background_colour(image)
+
+final_image.pil_image.save("new_background.png")
+
+background_img = pygame.image.load('new_background.png')
+counter = 0
 while running:
     # fill the background (R,G,B)
     screen.fill((0, 0, 0))
@@ -213,6 +261,7 @@ while running:
 
         # add enemy to background
         enemy(enemyX[i], enemyY[i], i)
+
 
     # Bullet Movement
     # if bullet hit top of wall, reset coordinates to spaceship mouthpiece
